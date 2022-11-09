@@ -33,7 +33,7 @@ const displayBooks = function () {
         const bookCardElement = document.createElement("div");
         bookCardElement.classList = "col-6 col-sm-4 col-md-3";
         bookCardElement.innerHTML = `
-                                                <div class="card my-3">
+                                                <div class="card my-3 ">
                                                     <img
                                                     class="card-img-top"
                                                     src=${book.img}
@@ -42,16 +42,16 @@ const displayBooks = function () {
                                                     <div class="card-body">
                                                     <h5 class="card-title book-title text-center">Card title</h5>
                                                     <div class="card-text d-flex flex-column text-center my-3">
-                                                        <div class="book-id"><small>${book.id}</small></div>
+                                                        <div class="book-id"><small>${book.asin}</small></div>
                                                         <div class="book-category">${book.category}</div>
             
                                                         <div class="book-price"><span>$</span>${book.price}</div>
                                                     </div>
                                                     <div class="d-flex justify-content-between">
-                                                        <a href="#" class="btn btn-primary add-to-cart-btn"
-                                                        >Add to cart</a
+                                                        <button href="#" class="btn btn-primary add-to-cart-btn" id= "${book.asin}"
+                                                        onclick= "addToCart()">Add to cart</button
                                                         >
-                                                        <a href="#" class="btn btn-primary skip-btn">Skip</a>
+                                                        <button href="#" class="btn btn-primary skip-btn">Skip</button>
                                                     </div>
                                                     </div>
                                                 </div>
@@ -59,6 +59,23 @@ const displayBooks = function () {
         bookRowElement.appendChild(bookCardElement);
       });
     });
+};
+
+// const cart = [];
+
+// button.addEventListener('click', event => {
+//     console.log(event.target.id)
+//    });
+
+const addToCart = function () {
+  let bookId = event.target.id; //book.asin
+  const addToCartButton = document.getElementById(`${bookId}`);
+  addToCartButton.innerHTML = "Added to cart!";
+  addToCartButton.style.backgroundColor = "red";
+
+  const cart = document.getElementById("cart");
+  let selectedBook = books.filter((book) => book.asin == bookId);
+  console.log("selectedbook:", selectedBook);
 };
 
 // const displayBooks = function () {
