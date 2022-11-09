@@ -28,8 +28,6 @@ const displayBooks = function () {
       const bookRowElement = document.querySelector(".book-row");
 
       books.forEach((book) => {
-        console.log(book);
-
         const bookCardElement = document.createElement("div");
         bookCardElement.classList = "col-6 col-sm-4 col-md-3";
         bookCardElement.innerHTML = `
@@ -61,52 +59,54 @@ const displayBooks = function () {
     });
 };
 
-// const cart = [];
-
-// button.addEventListener('click', event => {
-//     console.log(event.target.id)
-//    });
-
 const addToCart = function () {
+  //get book's ID
   let bookId = event.target.id; //book.asin
+  console.log(`selected book id: ${bookId}`);
+
+  //change the button style
   const addToCartButton = document.getElementById(`${bookId}`);
   addToCartButton.innerHTML = "Added to cart!";
   addToCartButton.style.backgroundColor = "red";
 
-  const cart = document.getElementById("cart");
-  let selectedBook = books.filter((book) => book.asin == bookId);
-  console.log("selectedbook:", selectedBook);
+  //fetch all data and filter the book id
+  fetch("https://striveschool-api.herokuapp.com/books")
+    .then((resp) => {
+      return resp.json();
+    })
+    .then((books) => {
+      let selectedBook = books.filter((book) => book.asin == bookId);
+      console.log("selectedBook:", selectedBook);
+      console.log("xx", selectedBook[0].img);
+
+      const newCartElement = document.createElement("div");
+      const cartRow = document.querySelector(".cart-row");
+      newCartElement.classList = "col-6 col-sm-4 col-md-3";
+      newCartElement.innerHTML = `
+                                    <div class="card my-3 ">
+                                        <img
+                                        class="card-img-top"
+                                        src=${selectedBook[0].img}
+                                        alt="Card image cap"
+                                        />
+                                        <div class="card-body">
+                                        <h5 class="card-title book-title text-center">Card title</h5>
+                                        <div class="card-text d-flex flex-column text-center my-3">
+                                            <div class="book-id"><small>${selectedBook[0].asin}</small></div>
+                                            <div class="book-category">${selectedBook[0].category}</div>
+
+                                            <div class="book-price"><span>$</span>${selectedBook[0].price}</div>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <button href="#" class="btn btn-primary add-to-cart-btn" id= "${selectedBook[0].asin}"
+                                            onclick= "addToCart()">Add to cart</button
+                                            >
+                                            <button href="#" class="btn btn-primary skip-btn">Skip</button>
+                                        </div>
+                                        </div>
+                                    </div>
+                                `;
+
+      cartRow.appendChild(newCartElement);
+    });
 };
-
-// const displayBooks = function () {
-//   const books = getBooksData();
-//   bookRowElement = document.querySelector(".book-row");
-
-//   books.forEach((book) => {
-//     console.log("fdgfdhdfzh");
-//     bookCardElement =
-//       document.createElement(`<div class="col-6 col-sm-4 col-md-3">
-//                                     <div class="card">
-//                                         <img
-//                                         class="card-img-top"
-//                                         src="${book.title}"
-//                                         alt="Card image cap"
-//                                         />
-//                                         <div class="card-body">
-//                                         <h5 class="card-title book-title text-center">Card title</h5>
-//                                         <div class="card-text d-flex flex-column text-center my-3">
-//                                             <div class="book-category">scifi</div>
-
-//                                             <div class="book-price"><span>$</span>5.92</div>
-//                                         </div>
-//                                         <div class="d-flex justify-content-between">
-//                                             <a href="#" class="btn btn-primary add-to-cart-btn"
-//                                             >Add to cart</a
-//                                             >
-//                                             <a href="#" class="btn btn-primary skip-btn">Skip</a>
-//                                         </div>
-//                                         </div>
-//                                     </div>
-//                                     </div>`);
-//   });
-// };
